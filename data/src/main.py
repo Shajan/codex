@@ -6,7 +6,7 @@ membership in the S&P 500 within a given time window and then downloads price
 history for those tickers. The resulting data is written to ``data.csv``.
 """
 
-from data.src.sp500 import _parse_wikipedia_changes, fetch_price_history
+from sp500 import _parse_wikipedia_changes, fetch_price_history
 
 
 def main(months: int = 12) -> None:
