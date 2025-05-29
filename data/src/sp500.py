@@ -20,8 +20,12 @@ def _parse_wikipedia_changes(months: int) -> List[str]:
     changes = []
     cutoff = dt.datetime.now() - dt.timedelta(days=30 * months)
     for df in tables:
-        if df.columns[0].startswith("Date") and {"Added", "Removed"}.issubset(df.columns):
-            # historical change table
+        # Flatten possible multi-index columns returned by ``read_html``
+        cols = [c[0] if isinstance(c, tuple) else c for c in df.columns]
+        if cols and isinstance(cols[0], str) and cols[0].startswith("Date") and {"Added", "Removed"}.issubset(cols):
+            # use flattened names for easy lookup
+            df = df.copy()
+            df.columns = cols
             for _, row in df.iterrows():
                 date = pd.to_datetime(row["Date"], errors="coerce")
                 if pd.isna(date) or date < cutoff:

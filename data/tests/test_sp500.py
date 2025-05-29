@@ -29,3 +29,15 @@ def test_prepare_time_series():
     ts = sp500.prepare_time_series(df)
     assert ts.shape[0] == 4
     assert list(ts.columns) == ["AAA"]
+
+
+def test_parse_wikipedia_changes_multiindex():
+    multiindex_changes = pd.DataFrame({
+        ("Date", ""): ["2024-01-01"],
+        ("Added", ""): ["DDD"],
+        ("Removed", ""): [None],
+    })
+
+    with mock.patch("data.src.sp500.pd.read_html", return_value=[multiindex_changes]):
+        tickers = sp500._parse_wikipedia_changes(240)
+    assert tickers == ["DDD"]
