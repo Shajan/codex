@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Series Prediction Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container py-4">
+    <h1 class="mb-4">Time Series Prediction Platform</h1>
+    <div class="mb-3">
+        <h4>Upload Data Source</h4>
+        <form id="uploadForm">
+            <div class="mb-2">
+                <input type="text" class="form-control" id="dataSourceName" placeholder="Data Source Name" required>
+            </div>
+            <div class="mb-2">
+                <input type="file" class="form-control" id="dataFile" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+        <div id="uploadMsg" class="mt-2"></div>
+    </div>
+    <div class="mb-3">
+        <h4>Your Data Sources</h4>
+        <ul id="dataSourcesList" class="list-group"></ul>
+    </div>
+    <div class="mb-3">
+        <h4>Standard Datasets</h4>
+        <ul id="standardDatasetsList" class="list-group"></ul>
+    </div>
+    <div class="mb-3">
+        <h4>Get Prediction</h4>
+        <form id="predictForm">
+            <div class="mb-2">
+                <input type="text" class="form-control" id="predictDataSource" placeholder="Data Source Name" required>
+            </div>
+            <div class="mb-2">
+                <input type="number" class="form-control" id="predictSteps" placeholder="Steps" value="10" min="1" required>
+            </div>
+            <button type="submit" class="btn btn-success">Predict</button>
+        </form>
+        <div id="predictionResult" class="mt-2"></div>
+    </div>
+</div>
+<script>
+const apiBase = "/";
+
+document.getElementById('uploadForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const name = document.getElementById('dataSourceName').value;
+    const file = document.getElementById('dataFile').files[0];
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('file', file);
+    const res = await fetch(apiBase + 'data-sources/upload', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await res.json();
+    document.getElementById('uploadMsg').innerText = data.message;
+    loadDataSources();
+};
+
+async function loadDataSources() {
+    const res = await fetch(apiBase + 'data-sources');
+    const data = await res.json();
+    const list = document.getElementById('dataSourcesList');
+    list.innerHTML = '';
+    data.forEach(name => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.innerText = name;
+        list.appendChild(li);
+    });
+}
+
+async function loadStandardDatasets() {
+    const res = await fetch(apiBase + 'standard-datasets');
+    const data = await res.json();
+    const list = document.getElementById('standardDatasetsList');
+    list.innerHTML = '';
+    Object.entries(data).forEach(([key, desc]) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.innerText = `${key}: ${desc}`;
+        list.appendChild(li);
+    });
+}
+
+document.getElementById('predictForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const dataSource = document.getElementById('predictDataSource').value;
+    const steps = document.getElementById('predictSteps').value;
+    const res = await fetch(apiBase + `predict?data_source=${encodeURIComponent(dataSource)}&steps=${steps}`);
+    const data = await res.json();
+    document.getElementById('predictionResult').innerText = JSON.stringify(data, null, 2);
+};
+
+loadDataSources();
+loadStandardDatasets();
+</script>
+</body>
+</html>
