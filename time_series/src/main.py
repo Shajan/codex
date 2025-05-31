@@ -2,6 +2,11 @@ from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import StreamingResponse
 from typing import List
 
+from .data_fetcher import DataFetcher
+from lib.fetchers import CSVDataFetcher, TSVDataFetcher
+from lib.http_fetcher import HTTPPaginatedDataFetcher
+from lib.yahoo_fetcher import YahooFinanceDataFetcher
+
 app = FastAPI()
 
 data_sources = {}

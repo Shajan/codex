@@ -59,6 +59,22 @@ print(client.list_data_sources())
 3. **Open the frontend:**
    - Open `time_series/src/frontend_build/index.html` in your browser.
 
+## Running Unit Tests
+
+To run the unit tests for this project, use the following command from the project root:
+
+```bash
+python -m unittest discover -s time_series/src/test -p 'test_*.py'
+```
+
+Or, to run all tests in the main source directory:
+
+```bash
+python -m unittest discover -s time_series/src -p 'test_*.py'
+```
+
+This will automatically discover and run all test files matching the pattern `test_*.py`.
+
 ## Notes
 - The prediction endpoint currently returns dummy data.
 - Standard datasets are hardcoded for demonstration.
