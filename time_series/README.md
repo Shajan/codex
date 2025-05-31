@@ -11,16 +11,22 @@ This project is a Time Series Prediction Platform that allows users to upload, m
 ## Project Structure
 
 ```
-time_series/
-  src/
-    main.py                # FastAPI backend server
-    requirements.txt       # Backend dependencies
-    frontend_build/
-      index.html           # Web UI
-    sdk/
-      client.py            # Python SDK client
-      setup.py             # SDK packaging
-      __init__.py
+src/
+  main.py                # FastAPI backend server
+  requirements.txt       # Backend dependencies
+  static_html/
+    index.html           # Web UI
+  sdk/
+    client.py            # Python SDK client
+    setup.py             # SDK packaging
+    __init__.py
+  lib/
+    fetchers.py
+    http_fetcher.py
+    yahoo_fetcher.py
+  test/
+    test_fetchers.py
+    __init__.py
 ```
 
 ## Usage
@@ -34,10 +40,10 @@ time_series/
   - `/predict` (GET): Get dummy predictions for a data source
 
 ### 2. Web Frontend
-- Open `frontend_build/index.html` in your browser for a simple UI to interact with the backend.
+- Open `src/static_html/index.html` in your browser for a simple UI to interact with the backend.
 
 ### 3. Python SDK
-- Use the SDK in `sdk/client.py` to interact with the API from Python code.
+- Use the SDK in `src/sdk/client.py` to interact with the API from Python code.
 
 #### Example usage:
 ```python
@@ -50,27 +56,27 @@ print(client.list_data_sources())
 
 1. **Install backend dependencies:**
    ```bash
-   pip install -r time_series/src/requirements.txt
+   pip install -r src/requirements.txt
    ```
 2. **Run the backend server:**
    ```bash
-   uvicorn time_series.src.main:app --reload
+   uvicorn src.main:app --reload
    ```
 3. **Open the frontend:**
-   - Open `time_series/src/frontend_build/index.html` in your browser.
+   - Open `src/static_html/index.html` in your browser.
 
 ## Running Unit Tests
 
 To run the unit tests for this project, use the following command from the project root:
 
 ```bash
-python -m unittest discover -s time_series/src/test -p 'test_*.py'
+python -m unittest discover -s src/test -p 'test_*.py'
 ```
 
 Or, to run all tests in the main source directory:
 
 ```bash
-python -m unittest discover -s time_series/src -p 'test_*.py'
+python -m unittest discover -s src -p 'test_*.py'
 ```
 
 This will automatically discover and run all test files matching the pattern `test_*.py`.

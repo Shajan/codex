@@ -1,4 +1,3 @@
-# Moved fetcher implementations from src/fetchers.py
 import pandas as pd
 from data_fetcher import DataFetcher
 

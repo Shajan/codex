@@ -1,4 +1,3 @@
-# Moved YahooFinanceDataFetcher from src/yahoo_fetcher.py
 import yfinance as yf
 import pandas as pd
 from data_fetcher import DataFetcher
